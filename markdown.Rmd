@@ -1,0 +1,42 @@
+---
+title: "Activity Monitoring Data"
+author: "Wei Zhao"
+date: "Sunday, December 14, 2014"
+output: html_document
+---
+
+This is an R Markdown document. 
+
+Load data
+```{r}
+data<-read.csv("activity.csv")
+summary(data)
+```
+
+Make a histogram of the total number of steps taken each day
+```{r}
+stepsum<-tapply(data$steps,data$date,sum,na.rm=TRUE)
+barplot(stepsum, 
+        ylab="Steps",
+        xlab="Date")
+```
+
+Calculate and report the mean and median total number of steps taken per day
+```{r}
+mean(stepsum)
+median(stepsum)
+```
+
+Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+```{r}
+averagestep<-tapply(data$steps, data$interval,mean,na.rm=TRUE)
+xnames<-names(averagestep)
+plot(averagestep,xaxt="n")
+axis(1, at=1:length(xnames), labels=xnames)
+```
+
+Calculate and report the total number of missing values in the dataset
+```{r}
+newdata<-na.omit(data)
+nrow(data)-nrow(newdata)
+```
